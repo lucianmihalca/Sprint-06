@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const BASE_URL = "http://localhost:3000";
 
 /**
@@ -7,16 +9,19 @@ const BASE_URL = "http://localhost:3000";
  * @returns {Promise<Array>} Una promesa que resuelve con la lista de todos los jugadores.
  */
 async function getAllPlayers() {
-  const response = await fetch(`${BASE_URL}/players`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" }
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  try {
+    const response = await axios.get(`${BASE_URL}/players`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = `Error al obtener la lista de jugadores`;
+      console.error(message);
+      throw new Error(message);
+    } else {
+      console.error(`Error inesperado al obtener la lista de jugadores: ${error}`);
+      throw new Error("Error inesperado al obtener la lista de jugadores.");
+    }
   }
-
-  return await response.json();
 }
 
 /**
@@ -28,18 +33,19 @@ async function getAllPlayers() {
  * @returns {Promise<Object>} Una promesa que resuelve con los detalles del jugador creado.
  */
 async function createPlayer(name?: string) {
-  const requestBody = JSON.stringify({ playerName: name });
-  const response = await fetch(`${BASE_URL}/players`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: requestBody
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  try {
+    const response = await axios.post(`${BASE_URL}/players`, { playerName: name });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = `Error al crear el jugador`;
+      console.error(message);
+      throw new Error(message);
+    } else {
+      console.error(`Error inesperado al crear el jugador: ${error}`);
+      throw new Error("Error inesperado al crear el jugador.");
+    }
   }
-
-  return response.json();
 }
 
 /**
@@ -51,18 +57,19 @@ async function createPlayer(name?: string) {
  * @returns {Promise<Object>} Una promesa que resuelve con los detalles del jugador actualizado.
  */
 async function updatePlayerName(id: number, name: string) {
-  const requestBody = JSON.stringify({ playerName: name });
-  const response = await fetch(`${BASE_URL}/players/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: requestBody
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  try {
+    const response = await axios.put(`${BASE_URL}/players/${id}`, { playerName: name });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const message = `Error al actualizar el nombre del jugador con ID: ${id}`;
+      console.error(message);
+      throw new Error(message);
+    } else {
+      console.error(`Error inesperado al actualizar el nombre del jugador: ${error}`);
+      throw new Error("Error inesperado al actualizar el nombre del jugador.");
+    }
   }
-
-  return await response.json();
 }
 
 export const playerService = {
