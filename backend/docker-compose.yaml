@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-admin} # Usar la variable de entorno o el valor predeterminado
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-sql_diceapp}       # Usar la variable de entorno o el valor predeterminado
+      MYSQL_USER: ${MYSQL_USER:-admin}                     # Usar la variable de entorno o el valor predeterminado
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-admin}             # Usar la variable de entorno o el valor predeterminado
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
+    restart: always
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-dice} # Usar la variable de entorno o el valor predeterminado
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-ke7vvKBQjjdiqqKI} # Usar la variable de entorno o el valor predeterminado
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: always
+
+volumes:
+  mysql-data:
+  mongo-data:
